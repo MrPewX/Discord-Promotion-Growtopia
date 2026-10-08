@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>DisBot Studio — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#101319","surface-container":"#1d2026","secondary-container":"#3131c0","surface-variant":"#32353c","tertiary-container":"#008197","on-tertiary-fixed":"#001f26","inverse-primary":"#3f4cda","tertiary-fixed":"#acedff","primary":"#bec2ff","on-secondary":"#1000a9","on-primary-container":"#fffdff","on-surface-variant":"#c6c5d7","surface-container-high":"#272a31","surface-container-highest":"#32353c","on-secondary-fixed-variant":"#2f2ebe","tertiary":"#4cd7f6","on-tertiary":"#003640","primary-fixed-dim":"#bec2ff","primary-container":"#5865f2","background":"#101319","on-secondary-container":"#b0b2ff","secondary-fixed-dim":"#c0c1ff","primary-fixed":"#e0e0ff","on-primary-fixed":"#000569","tertiary-fixed-dim":"#4cd7f6","on-error":"#690005","on-surface":"#e1e2eb","surface-container-lowest":"#0b0e14","error":"#ffb4ab","on-secondary-fixed":"#07006c","on-error-container":"#ffdad6","inverse-surface":"#e1e2eb","outline-variant":"#454655","on-primary-fixed-variant":"#222fc2","surface":"#101319","surface-tint":"#bec2ff","error-container":"#93000a","outline":"#8f8fa0","secondary-fixed":"#e1e0ff","surface-container-low":"#191c22","on-tertiary-container":"#fdfeff","secondary":"#c0c1ff","on-background":"#e1e2eb","on-tertiary-fixed-variant":"#004e5c","surface-bright":"#363940","inverse-on-surface":"#2e3037","on-primary":"#000da4"},fontFamily:{"display":["Plus Jakarta Sans"],"headline":["Plus Jakarta Sans"],"body":["Inter"],"label":["Plus Jakarta Sans"],"code":["JetBrains Mono"]}}}};
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #454655; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #8f8fa0; }
+    body { margin: 0; padding: 0; overscroll-behavior: none; }
+    .page-section { display: none; }
+    .page-section.active { display: flex; flex-direction: column; gap: 1.5rem; }
+    .nav-link.active { background: #5865f2; color: #fffdff; font-weight: 700; box-shadow: 0 2px 8px rgba(88,101,242,0.4); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .page-section.active { animation: fadeIn 0.25s ease-out; }
+    .pulse-dot { animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite; }
+    @keyframes pulse-ring { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .input-field { background: #272a31; border: 1px solid #454655; color: #e1e2eb; border-radius: 0.5rem; padding: 0.5rem 0.75rem; font-family: 'Inter', sans-serif; font-size: 0.875rem; outline: none; transition: border-color 0.15s; }
+    .input-field:focus { border-color: #5865f2; box-shadow: 0 0 0 2px rgba(88,101,242,0.2); }
+    .btn-primary { background: #5865f2; color: #fffdff; font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; transition: all 0.15s; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8125rem; display: inline-flex; align-items: center; gap: 0.375rem; }
+    .btn-primary:hover { background: #4752c4; }
+    .btn-secondary { background: #272a31; color: #e1e2eb; font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.5rem; border: 1px solid #454655; cursor: pointer; transition: all 0.15s; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8125rem; display: inline-flex; align-items: center; gap: 0.375rem; }
+    .btn-secondary:hover { background: #32353c; }
+    .btn-danger { background: #93000a; color: #ffdad6; font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; transition: all 0.15s; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8125rem; display: inline-flex; align-items: center; gap: 0.375rem; }
+    .btn-danger:hover { background: #ba1a1a; }
+    .toggle-switch { position: relative; width: 44px; height: 24px; background: #454655; border-radius: 999px; cursor: pointer; transition: background 0.2s; }
+    .toggle-switch.on { background: #5865f2; }
+    .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: #e1e2eb; border-radius: 999px; transition: transform 0.2s; }
+    .toggle-switch.on::after { transform: translateX(20px); }
+    .card { background: #1d2026; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+    .badge { font-family: 'JetBrains Mono', monospace; font-size: 0.625rem; font-weight: 600; padding: 0.125rem 0.375rem; border-radius: 0.25rem; }
+  </style>
+</head>
+<body class="bg-background font-body text-on-surface antialiased">
+
+  <!-- ======================= SIDEBAR ======================= -->
+  <aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest z-50 flex flex-col justify-between shadow-lg">
+    <div class="flex flex-col">
+      <!-- Logo -->
+      <div class="h-16 px-4 flex items-center gap-2 border-b border-surface-variant/30">
+        <div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center">
+          <span class="material-symbols-outlined text-on-primary-container text-[20px]">robot_2</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-headline font-bold text-base tracking-tight text-on-surface">DisBot Studio</span>
+          <span class="font-code text-[10px] text-on-surface-variant">Self-Bot v2.4.1</span>
+        </div>
+      </div>
+      <!-- Nav -->
+      <div class="px-3 py-4 flex flex-col gap-1">
+        <span class="font-label text-[10px] uppercase tracking-widest text-outline px-3 mb-1">Core</span>
+        <a class="nav-link active flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer" data-page="overview" onclick="showPage('overview')">
+          <span class="material-symbols-outlined text-[20px]">sensors</span>Overview
+        </a>
+        <a class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all cursor-pointer" data-page="scheduled" onclick="showPage('scheduled')">
+          <span class="material-symbols-outlined text-[20px]">schedule_send</span>Pesan Terjadwal
+        </a>
+        <a class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all cursor-pointer" data-page="autoreply" onclick="showPage('autoreply')">
+          <span class="material-symbols-outlined text-[20px]">quickreply</span>Auto-Reply DM
+        </a>
+        <a class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all cursor-pointer" data-page="logs" onclick="showPage('logs')">
+          <span class="material-symbols-outlined text-[20px]">terminal</span>Aktivitas &amp; Log
+        </a>
+
+        <span class="font-label text-[10px] uppercase tracking-widest text-outline px-3 mt-4 mb-1">Bot App</span>
+        <a class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all cursor-pointer" data-page="botapp" onclick="showPage('botapp')">
+          <span class="material-symbols-outlined text-[20px]">smart_toy</span>Pengaturan Bot App
+        </a>
+        <a class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all cursor-pointer" data-page="webnotify" onclick="showPage('webnotify')">
+          <span class="material-symbols-outlined text-[20px]">webhook</span>Kirim Notifikasi Web
+        </a>
+        <a class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all cursor-pointer" data-page="history" onclick="showPage('history')">
+          <span class="material-symbols-outlined text-[20px]">history</span>Riwayat Input
+        </a>
+
+        <span class="font-label text-[10px] uppercase tracking-widest text-outline px-3 mt-4 mb-1">Database</span>
+        <div class="flex items-center gap-3 px-3 py-2">
+          <span class="material-symbols-outlined text-[18px] text-amber-400">database</span>
+          <div class="flex flex-col">
+            <span class="font-label font-semibold text-[10px] text-on-surface">Firebase RTDB</span>
+            <span class="font-code text-[9px] text-emerald-400" id="sidebar-firebase">Connected</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Sidebar Footer -->
+    <div class="p-3">
+      <div class="bg-surface-container-low rounded-xl p-3 flex items-center justify-between shadow-md" id="sidebar-user">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="relative flex-shrink-0">
+            <div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center">
+              <span class="material-symbols-outlined text-primary text-[20px]">smart_toy</span>
+            </div>
+            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full ring-2 ring-surface-container-low" id="sidebar-dot" style="background:#6b7280"></span>
+          </div>
+          <div class="flex flex-col min-w-0">
+            <span class="font-label font-semibold text-xs text-on-surface truncate" id="sidebar-tag">Connecting...</span>
+            <span class="font-code text-[10px] text-on-surface-variant" id="sidebar-status">Offline</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ======================= MAIN CONTENT ======================= -->
+  <div class="pl-64 min-h-screen">
+    <!-- Top Header -->
+    <header class="fixed top-0 left-64 right-0 h-14 bg-surface-dim/80 backdrop-blur-xl z-40 flex items-center justify-between px-6 border-b border-surface-variant/20">
+      <div class="flex items-center gap-3">
+        <span class="font-headline font-bold text-base text-on-surface" id="page-title">Overview</span>
+        <div class="h-4 w-px bg-surface-variant"></div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low">
+          <span class="relative flex h-2 w-2" id="header-ping-dot">
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-gray-500"></span>
+          </span>
+          <span class="font-code text-[11px] text-on-surface" id="header-status">Self-Bot OFFLINE</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="btn-secondary text-xs" onclick="location.reload()">
+          <span class="material-symbols-outlined text-[16px]">restart_alt</span>Refresh
+        </button>
+      </div>
+    </header>
+
+    <main class="pt-14 px-6 py-6">
+
+      <!-- ============ PAGE: OVERVIEW ============ -->
+      <div class="page-section active" id="page-overview">
+        <!-- Identity Banner -->
+        <div class="relative overflow-hidden rounded-xl bg-surface-container p-6 shadow-md">
+          <div class="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-primary-container/10 blur-3xl pointer-events-none"></div>
+          <div class="absolute right-36 bottom-0 h-40 w-40 rounded-full bg-tertiary-container/10 blur-2xl pointer-events-none"></div>
+          <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="relative">
+                <div class="h-16 w-16 rounded-full bg-surface-container-high p-1 ring-2 ring-primary-container/40 flex items-center justify-center overflow-hidden">
+                  <img class="h-full w-full rounded-full object-cover" id="overview-avatar" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23272a31' width='100' height='100'/><text x='50' y='60' text-anchor='middle' fill='%23bec2ff' font-size='40'>?</text></svg>"/>
+                </div>
+                <span class="absolute bottom-0 right-0 h-4 w-4 rounded-full ring-4 ring-surface-container" id="overview-dot" style="background:#6b7280"></span>
+              </div>
+              <div class="flex flex-col">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-headline font-bold text-2xl text-on-surface" id="overview-tag">Loading...</span>
+                  <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold" id="overview-session-badge" style="background:rgba(107,114,128,0.15);color:#9ca3af">
+                    <span class="h-1.5 w-1.5 rounded-full bg-gray-400"></span>CONNECTING
+                  </span>
+                </div>
+                <div class="flex items-center gap-3 text-on-surface-variant text-xs mt-1">
+                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-tertiary">fingerprint</span>ID: <span id="overview-id">—</span></span>
+                  <span>•</span>
+                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-primary">dns</span><span id="overview-guilds">0</span> Servers</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <!-- Gateway -->
+          <div class="card flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[22px]">router</span></div>
+                <div><span class="font-headline font-semibold text-sm text-on-surface block">Discord Gateway</span><span class="font-code text-[10px] text-on-surface-variant">wss://gateway.discord.gg</span></div>
+              </div>
+              <div class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-bold" id="gw-badge" style="background:rgba(107,114,128,0.15);color:#9ca3af">
+                <span class="relative flex h-2 w-2"><span class="relative inline-flex rounded-full h-2 w-2 bg-gray-500" id="gw-dot"></span></span>
+                <span id="gw-label">OFFLINE</span>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 bg-surface-container-low p-3 rounded-lg">
+              <div>
+                <span class="font-label text-[10px] text-outline uppercase block mb-1">Latency</span>
+                <div class="flex items-baseline gap-1">
+                  <span class="font-headline font-bold text-2xl text-tertiary" id="gw-ping">—</span>
+                  <span class="font-code text-[10px] text-tertiary">ms</span>
+                </div>
+              </div>
+              <div>
+                <span class="font-label text-[10px] text-outline uppercase block mb-1">User</span>
+                <span class="font-headline font-semibold text-sm text-on-surface truncate block" id="gw-user">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Uptime -->
+          <div class="card flex flex-col gap-4">
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-secondary"><span class="material-symbols-outlined text-[22px]">timer</span></div>
+              <div><span class="font-headline font-semibold text-sm text-on-surface block">Server Uptime</span><span class="font-code text-[10px] text-on-surface-variant">Node.js Worker</span></div>
+            </div>
+            <div>
+              <span class="font-label text-[10px] text-outline uppercase block mb-1">Elapsed</span>
+              <span class="font-headline font-bold text-lg text-on-surface" id="uptime-text">—</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 bg-surface-container-low p-3 rounded-lg">
+              <div><span class="font-label text-[10px] text-outline uppercase">Platform</span><span class="font-headline font-semibold text-sm text-primary block mt-0.5" id="sys-platform">—</span></div>
+              <div><span class="font-label text-[10px] text-outline uppercase">Node.js</span><span class="font-headline font-semibold text-sm text-emerald-400 block mt-0.5" id="sys-node">—</span></div>
+            </div>
+          </div>
+
+          <!-- Memory -->
+          <div class="card flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-tertiary"><span class="material-symbols-outlined text-[22px]">memory</span></div>
+                <div><span class="font-headline font-semibold text-sm text-on-surface block">Resource Load</span><span class="font-code text-[10px] text-on-surface-variant" id="mem-node-ver">—</span></div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="flex justify-between items-end">
+                <div><span class="font-label text-[10px] text-outline uppercase block">RAM</span><span class="font-headline font-bold text-lg text-on-surface"><span id="mem-rss">—</span> MB</span></div>
+                <span class="font-code text-xs font-semibold text-primary" id="mem-pct">—</span>
+              </div>
+              <div class="w-full h-2.5 rounded-full bg-surface-container-lowest overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-to-r from-primary-container via-secondary to-tertiary shadow-[0_0_12px_rgba(88,101,242,0.6)] transition-all duration-500" id="mem-bar" style="width:0%"></div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 bg-surface-container-low p-3 rounded-lg">
+              <div><span class="font-label text-[10px] text-outline uppercase">Heap Used</span><span class="font-headline font-semibold text-sm text-tertiary block mt-0.5"><span id="mem-heap">—</span> MB</span></div>
+              <div><span class="font-label text-[10px] text-outline uppercase">CPU Cores</span><span class="font-headline font-semibold text-sm text-on-surface block mt-0.5" id="sys-cores">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Stats Strip -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-surface-container-lowest p-4 rounded-xl shadow-inner">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">mark_chat_read</span></div>
+            <div><span class="font-label text-[10px] text-outline uppercase block">Auto Reply</span><span class="font-headline font-semibold text-sm text-on-surface" id="stat-autoreply">—</span></div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-tertiary"><span class="material-symbols-outlined text-[20px]">alarm</span></div>
+            <div><span class="font-label text-[10px] text-outline uppercase block">Scheduled</span><span class="font-headline font-semibold text-sm text-on-surface" id="stat-scheduled">—</span></div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-emerald-400"><span class="material-symbols-outlined text-[20px]">smart_toy</span></div>
+            <div><span class="font-label text-[10px] text-outline uppercase block">App Bot</span><span class="font-headline font-semibold text-sm" id="stat-appbot">—</span></div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-secondary"><span class="material-symbols-outlined text-[20px]">dns</span></div>
+            <div><span class="font-label text-[10px] text-outline uppercase block">Guilds</span><span class="font-headline font-semibold text-sm text-on-surface" id="stat-guilds">—</span></div>
+          </div>
+        </div>
+
+        <!-- Firebase Status Card -->
+        <div class="card bg-surface-container-low border border-amber-500/20">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                <span class="material-symbols-outlined text-amber-400 text-[22px]">database</span>
+              </div>
+              <div>
+                <span class="font-headline font-semibold text-sm text-on-surface block">Firebase Realtime DB</span>
+                <span class="font-code text-[10px] text-on-surface-variant" id="firebase-url">—</span>
+              </div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-400 text-[10px] font-bold">
+              <span class="h-2 w-2 rounded-full bg-emerald-400 pulse-dot"></span>SYNCED
+            </span>
+          </div>
+          <p class="text-on-surface-variant text-[10px] mt-2">Config, log, dan riwayat input otomatis tersinkron ke Firebase.</p>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: PESAN TERJADWAL ============ -->
+      <div class="page-section" id="page-scheduled">
+        <div class="card">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="font-headline font-bold text-lg text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-primary">schedule_send</span>Pesan Terjadwal</h2>
+              <p class="text-on-surface-variant text-xs mt-1">Atur pesan otomatis ke server & channel tertentu dengan jadwal yang mudah dikonfigurasi.</p>
+            </div>
+            <button class="btn-primary" onclick="addScheduleRow()"><span class="material-symbols-outlined text-[16px]">add</span>Tambah Jadwal</button>
+          </div>
+          <div class="flex flex-col gap-4" id="schedule-list">
+            <!-- Populated by JS -->
+          </div>
+          <div class="mt-4 flex justify-end">
+            <button class="btn-primary" onclick="saveScheduledMessages()"><span class="material-symbols-outlined text-[16px]">save</span>Simpan Perubahan</button>
+          </div>
+          <div id="schedule-status" class="text-xs mt-2 font-semibold font-code"></div>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: AUTO REPLY ============ -->
+      <div class="page-section" id="page-autoreply">
+        <div class="card">
+          <h2 class="font-headline font-bold text-lg text-on-surface flex items-center gap-2 mb-1"><span class="material-symbols-outlined text-primary">quickreply</span>Auto-Reply DM</h2>
+          <p class="text-on-surface-variant text-xs mb-4">Ketika ada user yang mengirim DM, self-bot akan otomatis membalas dengan template ini.</p>
+          <div class="flex flex-col gap-4 max-w-xl">
+            <div class="flex items-center gap-3">
+              <span class="text-sm font-semibold text-on-surface">Status:</span>
+              <div class="toggle-switch" id="ar-toggle" onclick="toggleAutoReply()"></div>
+              <span class="font-code text-xs" id="ar-status-label">—</span>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant mb-1">Template Pesan Balasan</label>
+              <textarea id="ar-template" class="input-field w-full" rows="4" placeholder="Tulis template auto-reply..."></textarea>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn-primary" onclick="saveAutoReply()"><span class="material-symbols-outlined text-[16px]">save</span>Simpan</button>
+            </div>
+            <div id="ar-save-status" class="text-xs font-semibold font-code"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: LOGS ============ -->
+      <div class="page-section" id="page-logs">
+        <div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-xl overflow-hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4 py-3 bg-surface-container-low">
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1.5">
+                <span class="h-3 w-3 rounded-full bg-rose-500/80"></span>
+                <span class="h-3 w-3 rounded-full bg-amber-500/80"></span>
+                <span class="h-3 w-3 rounded-full bg-emerald-500/80"></span>
+              </div>
+              <div class="h-4 w-px bg-surface-variant"></div>
+              <span class="material-symbols-outlined text-[18px] text-primary">terminal</span>
+              <span class="font-headline font-semibold text-sm text-on-surface">Live Activity Log</span>
+              <span class="font-code text-[10px] text-outline">(Stdout Stream)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="inline-flex items-center gap-1 px-2 py-1 rounded bg-surface-container hover:bg-surface-variant text-on-surface-variant hover:text-on-surface font-code text-[11px] transition-colors" onclick="fetchLogs()">
+                <span class="material-symbols-outlined text-[14px]">refresh</span>Refresh
+              </button>
+              <button class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container-high text-emerald-400 font-code text-[11px]">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 pulse-dot"></span>Auto-refresh
+              </button>
+            </div>
+          </div>
+          <div class="p-4 flex flex-col gap-1 font-code text-[11px] overflow-x-auto max-h-[500px] overflow-y-auto" id="log-container">
+            <div class="text-on-surface-variant/50 italic">Loading logs...</div>
+          </div>
+          <div class="flex items-center justify-between px-4 py-2 bg-surface-container-low font-code text-[10px] text-on-surface-variant">
+            <span>Encoding: UTF-8</span>
+            <span id="log-count">0 entries</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: BOT APP SETTINGS ============ -->
+      <div class="page-section" id="page-botapp">
+        <div class="card">
+          <h2 class="font-headline font-bold text-lg text-on-surface flex items-center gap-2 mb-1"><span class="material-symbols-outlined text-primary">smart_toy</span>Pengaturan Bot App (Notifikasi)</h2>
+          <p class="text-on-surface-variant text-xs mb-4">Konfigurasi bot Discord reguler yang digunakan untuk mengirim notifikasi dari web ke channel server Anda.</p>
+          <div class="flex flex-col gap-4 max-w-xl">
+            <!-- Bot App Status -->
+            <div class="bg-surface-container-low rounded-lg p-4 flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center">
+                <span class="material-symbols-outlined text-tertiary text-[24px]">smart_toy</span>
+              </div>
+              <div>
+                <span class="font-headline font-semibold text-sm text-on-surface block" id="botapp-tag">—</span>
+                <span class="font-code text-[10px]" id="botapp-status" style="color:#9ca3af">Offline</span>
+              </div>
+            </div>
+            <!-- Notification Channel -->
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant mb-1">Channel ID Notifikasi</label>
+              <input type="text" id="botapp-channel" class="input-field w-full" placeholder="Contoh: 1555157551652278322"/>
+              <p class="text-[10px] text-outline mt-1">ID channel di server Discord Anda tempat notifikasi dari web akan dikirim.</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn-primary" onclick="saveBotAppSettings()"><span class="material-symbols-outlined text-[16px]">save</span>Simpan Channel</button>
+            </div>
+            <div id="botapp-save-status" class="text-xs font-semibold font-code"></div>
+          </div>
+        </div>
+        <!-- Info Card -->
+        <div class="card bg-surface-container-low border border-surface-variant/30">
+          <h3 class="font-headline font-semibold text-sm text-on-surface flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-tertiary text-[18px]">info</span>Cara Mendapatkan Channel ID</h3>
+          <ol class="font-body text-xs text-on-surface-variant space-y-1 list-decimal list-inside">
+            <li>Buka Discord → Pengaturan Pengguna → Tampilan → aktifkan <strong>Mode Pengembang</strong></li>
+            <li>Klik kanan pada channel yang diinginkan → pilih <strong>"Salin ID Channel"</strong></li>
+            <li>Paste ID tersebut ke kolom di atas lalu klik Simpan</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: WEB NOTIFY ============ -->
+      <div class="page-section" id="page-webnotify">
+        <div class="card">
+          <h2 class="font-headline font-bold text-lg text-on-surface flex items-center gap-2 mb-1"><span class="material-symbols-outlined text-primary">webhook</span>Kirim Notifikasi dari Web</h2>
+          <p class="text-on-surface-variant text-xs mb-4">Kirim data / pesan dari dashboard ini ke channel Discord Anda via Bot App.</p>
+          <div class="flex flex-col gap-4 max-w-xl">
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant mb-1">Isi Pesan / Input Data</label>
+              <textarea id="notify-input" class="input-field w-full" rows="5" placeholder="Tulis pesan yang akan dikirim ke Discord..."></textarea>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn-primary" onclick="sendWebNotify()"><span class="material-symbols-outlined text-[16px]">send</span>Kirim ke Discord</button>
+            </div>
+            <div id="notify-status" class="text-xs font-semibold font-code"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: HISTORY (Firebase) ============ -->
+      <div class="page-section" id="page-history">
+        <div class="card">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="font-headline font-bold text-lg text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-amber-400">history</span>Riwayat Input dari Web</h2>
+              <p class="text-on-surface-variant text-xs mt-1">Semua input yang pernah dikirim dari dashboard ke Discord, tersimpan di Firebase.</p>
+            </div>
+            <button class="btn-secondary" onclick="fetchHistory()"><span class="material-symbols-outlined text-[16px]">refresh</span>Refresh</button>
+          </div>
+          <div class="flex flex-col gap-2" id="history-list">
+            <div class="text-on-surface-variant text-xs italic p-4 text-center">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ======================= JAVASCRIPT ======================= -->
+  <script>
+    // ---- Navigation ----
+    function showPage(id) {
+      document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      document.querySelectorAll('.nav-link').forEach(el => {
+        el.classList.remove('active');
+        el.classList.add('text-on-surface-variant');
+      });
+      const activeNav = document.querySelector(`.nav-link[data-page="${id}"]`);
+      if (activeNav) { activeNav.classList.add('active'); activeNav.classList.remove('text-on-surface-variant'); }
+      const titles = { overview:'Overview', scheduled:'Pesan Terjadwal', autoreply:'Auto-Reply DM', logs:'Aktivitas & Log', botapp:'Pengaturan Bot App', webnotify:'Kirim Notifikasi Web', history:'Riwayat Input' };
+      document.getElementById('page-title').textContent = titles[id] || id;
+      if (id === 'logs') fetchLogs();
+      if (id === 'history') fetchHistory();
+    }
+
+    // ---- Fetch Status ----
+    let statusData = null;
+    async function fetchStatus() {
+      try {
+        const res = await fetch('/api/status');
+        statusData = await res.json();
+        updateUI(statusData);
+      } catch (e) { console.error('Status fetch error', e); }
+    }
+
+    function updateUI(d) {
+      const sb = d.selfBot;
+      const ab = d.appBot;
+
+      // Header
+      const hDot = document.querySelector('#header-ping-dot .relative');
+      const hStatus = document.getElementById('header-status');
+      if (sb.online) {
+        hDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]';
+        hStatus.textContent = `Self-Bot ONLINE • ${sb.ping}ms`;
+      } else {
+        hDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-gray-500';
+        hStatus.textContent = 'Self-Bot OFFLINE';
+      }
+
+      // Sidebar user
+      document.getElementById('sidebar-tag').textContent = sb.online ? sb.tag : 'Offline';
+      document.getElementById('sidebar-status').textContent = sb.online ? `${sb.ping}ms` : 'Disconnected';
+      document.getElementById('sidebar-dot').style.background = sb.online ? '#10b981' : '#6b7280';
+
+      // Overview banner
+      if (sb.online && sb.avatar) document.getElementById('overview-avatar').src = sb.avatar;
+      document.getElementById('overview-tag').textContent = sb.online ? sb.tag : 'Self-Bot Offline';
+      document.getElementById('overview-id').textContent = sb.id || '—';
+      document.getElementById('overview-guilds').textContent = sb.guilds || 0;
+      document.getElementById('overview-dot').style.background = sb.online ? '#10b981' : '#6b7280';
+      const sessBadge = document.getElementById('overview-session-badge');
+      if (sb.online) {
+        sessBadge.style.background = 'rgba(16,185,129,0.15)'; sessBadge.style.color = '#34d399';
+        sessBadge.innerHTML = '<span class="h-1.5 w-1.5 rounded-full bg-emerald-400 pulse-dot"></span>SESSION ACTIVE';
+      } else {
+        sessBadge.style.background = 'rgba(107,114,128,0.15)'; sessBadge.style.color = '#9ca3af';
+        sessBadge.innerHTML = '<span class="h-1.5 w-1.5 rounded-full bg-gray-400"></span>OFFLINE';
+      }
+
+      // Gateway card
+      const gwBadge = document.getElementById('gw-badge');
+      const gwDot = document.getElementById('gw-dot');
+      const gwLabel = document.getElementById('gw-label');
+      if (sb.online) {
+        gwBadge.style.background = 'rgba(16,185,129,0.15)'; gwBadge.style.color = '#34d399';
+        gwDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]';
+        gwLabel.textContent = 'ONLINE';
+      } else {
+        gwBadge.style.background = 'rgba(107,114,128,0.15)'; gwBadge.style.color = '#9ca3af';
+        gwDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-gray-500';
+        gwLabel.textContent = 'OFFLINE';
+      }
+      document.getElementById('gw-ping').textContent = sb.online ? sb.ping : '—';
+      document.getElementById('gw-user').textContent = sb.online ? sb.tag : '—';
+
+      // Uptime
+      document.getElementById('uptime-text').textContent = `${d.uptime.days} Hari ${d.uptime.hours} Jam ${d.uptime.minutes} Menit`;
+      document.getElementById('sys-platform').textContent = d.system.platform;
+      document.getElementById('sys-node').textContent = d.system.nodeVersion;
+      document.getElementById('mem-node-ver').textContent = `Runtime ${d.system.nodeVersion}`;
+
+      // Memory
+      document.getElementById('mem-rss').textContent = d.memory.rss;
+      document.getElementById('mem-heap').textContent = d.memory.heapUsed;
+      document.getElementById('sys-cores').textContent = d.system.cpuCores;
+      const pct = Math.round((parseFloat(d.memory.rss) / 512) * 100);
+      document.getElementById('mem-pct').textContent = `${pct}% Used`;
+      document.getElementById('mem-bar').style.width = `${pct}%`;
+
+      // Quick stats
+      const cfg = d.config;
+      document.getElementById('stat-autoreply').textContent = cfg.autoReply.enabled ? 'Aktif' : 'Nonaktif';
+      const activeSchedules = (cfg.scheduledMessages || []).filter(s => s.enabled).length;
+      document.getElementById('stat-scheduled').textContent = `${activeSchedules} Aktif`;
+      const appEl = document.getElementById('stat-appbot');
+      if (ab.online) { appEl.textContent = 'Online'; appEl.style.color = '#34d399'; }
+      else { appEl.textContent = 'Offline'; appEl.style.color = '#9ca3af'; }
+      document.getElementById('stat-guilds').textContent = (sb.guilds || 0) + ' Terhubung';
+
+      // Firebase URL
+      updateFirebaseUI(d);
+
+      // Auto Reply page (only update if user is not editing)
+      if (document.activeElement?.id !== 'ar-template') {
+        const arToggle = document.getElementById('ar-toggle');
+        const arLabel = document.getElementById('ar-status-label');
+        if (cfg.autoReply.enabled) { arToggle.classList.add('on'); arLabel.textContent = 'Aktif'; arLabel.style.color = '#34d399'; }
+        else { arToggle.classList.remove('on'); arLabel.textContent = 'Nonaktif'; arLabel.style.color = '#9ca3af'; }
+        document.getElementById('ar-template').value = cfg.autoReply.template;
+      }
+
+      // Scheduled messages — only load ONCE on first fetch, not on every update
+      if (!scheduleDataLoaded && cfg.scheduledMessages) {
+        scheduleData = JSON.parse(JSON.stringify(cfg.scheduledMessages));
+        renderScheduleList();
+        scheduleDataLoaded = true;
+      }
+
+      // Bot App page (only update if user is not editing)
+      document.getElementById('botapp-tag').textContent = ab.online ? ab.tag : 'Bot App Offline';
+      const botSt = document.getElementById('botapp-status');
+      if (ab.online) { botSt.textContent = 'Online'; botSt.style.color = '#34d399'; }
+      else { botSt.textContent = 'Offline'; botSt.style.color = '#9ca3af'; }
+      if (document.activeElement?.id !== 'botapp-channel') {
+        document.getElementById('botapp-channel').value = cfg.botApp.notificationChannelId;
+      }
+    }
+
+    // ---- Scheduled Messages (Local State + Guild Data) ----
+    let scheduleData = [];
+    let scheduleDataLoaded = false;
+    let guildsData = [];
+    let guildsLoaded = false;
+
+    async function loadGuilds() {
+      if (guildsLoaded) return;
+      try {
+        const res = await fetch('/api/guilds');
+        guildsData = await res.json();
+        guildsLoaded = true;
+      } catch (e) { guildsData = []; }
+    }
+
+    // Parse cron expression to friendly schedule object
+    function cronToSchedule(cron) {
+      if (!cron) return { type: 'interval_minutes', value: 60 };
+      const parts = cron.split(' ');
+      if (parts.length < 5) return { type: 'interval_minutes', value: 60 };
+      const [min, hour] = parts;
+
+      // */N * * * * → every N minutes
+      if (min.startsWith('*/') && hour === '*') {
+        return { type: 'interval_minutes', value: parseInt(min.replace('*/', '')) || 30 };
+      }
+      // 0 */N * * * → every N hours
+      if (min === '0' && hour.startsWith('*/')) {
+        return { type: 'interval_hours', value: parseInt(hour.replace('*/', '')) || 1 };
+      }
+      // 0 * * * * → every hour
+      if (min === '0' && hour === '*') {
+        return { type: 'interval_hours', value: 1 };
+      }
+      // 0 H,H,H * * * → at specific hours
+      if (min === '0' && hour.includes(',')) {
+        return { type: 'specific_hours', hours: hour.split(',').map(h => parseInt(h)) };
+      }
+      // 0 H * * * → at specific hour
+      if (min === '0' && !isNaN(parseInt(hour))) {
+        return { type: 'specific_hours', hours: [parseInt(hour)] };
+      }
+      return { type: 'interval_minutes', value: 60 };
+    }
+
+    // Convert friendly schedule back to cron
+    function scheduleToCron(sched) {
+      if (!sched) return '0 * * * *';
+      switch (sched.type) {
+        case 'interval_minutes': return `*/${sched.value || 30} * * * *`;
+        case 'interval_hours': return `0 */${sched.value || 1} * * *`;
+        case 'specific_hours': {
+          const hrs = (sched.hours || [0]).join(',');
+          return `0 ${hrs} * * *`;
+        }
+        default: return '0 * * * *';
+      }
+    }
+
+    function findGuildByChannelId(channelId) {
+      for (const g of guildsData) {
+        if (g.channels.some(ch => ch.id === channelId)) return g;
+      }
+      return null;
+    }
+
+    // ---- Searchable Dropdown Helper ----
+    function toggleDropdown(id) {
+      document.querySelectorAll('[id^="dd-menu-"]').forEach(el => {
+        if (el.id !== `dd-menu-${id}`) el.classList.add('hidden');
+      });
+      const menu = document.getElementById(`dd-menu-${id}`);
+      menu.classList.toggle('hidden');
+      if (!menu.classList.contains('hidden')) {
+        const searchInput = menu.querySelector('input');
+        if (searchInput) { searchInput.value = ''; filterDropdown(id, ''); searchInput.focus(); }
+      }
+    }
+
+    function closeDropdown(id) {
+      const menu = document.getElementById(`dd-menu-${id}`);
+      if (menu) menu.classList.add('hidden');
+    }
+
+    function filterDropdown(id, query) {
+      const list = document.getElementById(`dd-list-${id}`);
+      if (!list) return;
+      const items = list.querySelectorAll('.dropdown-item');
+      query = query.toLowerCase();
+      items.forEach(item => {
+        if (item.dataset.label.includes(query)) item.style.display = 'block';
+        else item.style.display = 'none';
+      });
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.custom-dropdown')) {
+        document.querySelectorAll('[id^="dd-menu-"]').forEach(el => el.classList.add('hidden'));
+      }
+    });
+
+    function renderSearchableDropdown(id, options, selectedValue, placeholder, onSelectJS) {
+      const selectedOpt = options.find(o => o.value === selectedValue);
+      const displayLabel = selectedOpt ? selectedOpt.label : placeholder;
+      const optsHtml = options.map(o => `
+        <div class="px-3 py-2 text-xs hover:bg-surface-variant/50 cursor-pointer text-on-surface dropdown-item" data-label="${escapeHtml(o.label).toLowerCase()}" onclick="${onSelectJS}('${o.value}'); closeDropdown('${id}')">
+          ${escapeHtml(o.label)}
+        </div>
+      `).join('');
+
+      return `
+        <div class="relative custom-dropdown" id="dd-wrapper-${id}">
+          <div class="input-field w-full text-xs flex justify-between items-center cursor-pointer" onclick="toggleDropdown('${id}')">
+            <span class="truncate ${selectedOpt ? 'text-on-surface' : 'text-on-surface-variant'}">${escapeHtml(displayLabel)}</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+          </div>
+          <div id="dd-menu-${id}" class="absolute z-20 w-full mt-1 bg-surface-container-high border border-surface-variant/30 rounded-lg shadow-lg max-h-56 flex flex-col hidden overflow-hidden">
+            <div class="p-2 bg-surface-container-high border-b border-surface-variant/30 flex-shrink-0">
+              <input type="text" class="input-field w-full text-xs py-1.5" placeholder="Ketik untuk mencari..." oninput="filterDropdown('${id}', this.value)" onclick="event.stopPropagation()">
+            </div>
+            <div id="dd-list-${id}" class="overflow-y-auto flex-1">
+              ${optsHtml || '<div class="px-3 py-2 text-xs text-on-surface-variant italic">Tidak ada pilihan</div>'}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function renderScheduleList() {
+      await loadGuilds();
+      const container = document.getElementById('schedule-list');
+      if (!scheduleData || scheduleData.length === 0) {
+        container.innerHTML = '<div class="text-on-surface-variant text-xs italic p-6 text-center bg-surface-container-low rounded-lg border border-dashed border-surface-variant">Belum ada jadwal. Klik "+ Tambah Jadwal" untuk membuat jadwal baru.</div>';
+        return;
+      }
+      container.innerHTML = scheduleData.map((m, i) => {
+        const sched = cronToSchedule(m.cronExpression);
+        const currentGuild = findGuildByChannelId(m.channelId);
+        const guildId = currentGuild ? currentGuild.id : (m.guildId || '');
+
+        // Build options arrays for searchable dropdowns
+        const guildOptions = guildsData.map(g => ({ value: g.id, label: g.name }));
+        const selectedGuild = guildsData.find(g => g.id === guildId);
+        const channelOptions = selectedGuild ? selectedGuild.channels.map(ch => ({ value: ch.id, label: `#${ch.name}` })) : [];
+
+        // Build schedule type selector
+        const isMin = sched.type === 'interval_minutes';
+        const isHour = sched.type === 'interval_hours';
+        const isSpecific = sched.type === 'specific_hours';
+
+        // Build specific hours checkboxes
+        const selectedHours = isSpecific ? sched.hours : [];
+        let hoursCheckboxes = '';
+        for (let h = 0; h < 24; h++) {
+          const checked = selectedHours.includes(h) ? 'checked' : '';
+          const label = h.toString().padStart(2, '0') + ':00';
+          hoursCheckboxes += `<label class="flex items-center gap-1 cursor-pointer">
+            <input type="checkbox" value="${h}" ${checked} onchange="onHourToggle(${i}, ${h}, this.checked)" class="accent-primary w-3 h-3"/>
+            <span class="text-[10px] font-code ${checked ? 'text-primary' : 'text-on-surface-variant'}">${label}</span>
+          </label>`;
+        }
+
+        return `
+        <div class="bg-surface-container-low rounded-xl border border-surface-variant/20 overflow-hidden" data-idx="${i}">
+          <!-- Header Row -->
+          <div class="flex items-center justify-between px-4 py-3 bg-surface-container-low/80">
+            <div class="flex items-center gap-3">
+              <div class="toggle-switch ${m.enabled ? 'on' : ''}" onclick="toggleScheduleEnabled(${i})"></div>
+              <input type="text" class="input-field text-xs font-semibold w-40" value="${escapeHtml(m.label || '')}" placeholder="Nama Jadwal" data-field="label" data-idx="${i}" oninput="onScheduleInput(this)"/>
+              <span class="badge bg-primary-container/20 text-primary">#${i+1}</span>
+              ${!m.enabled ? '<span class="badge bg-surface-container-high text-on-surface-variant">NONAKTIF</span>' : ''}
+            </div>
+            <button class="btn-danger text-[10px] px-2 py-1" onclick="removeScheduleRow(${i})"><span class="material-symbols-outlined text-[14px]">delete</span>Hapus</button>
+          </div>
+
+          <div class="px-4 pb-4 pt-2 flex flex-col gap-3">
+            <!-- Server & Channel Row -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[10px] font-semibold text-on-surface-variant uppercase tracking-wider mb-1">
+                  <span class="material-symbols-outlined text-[12px] align-middle">dns</span> Server
+                </label>
+                ${renderSearchableDropdown(`guild-${i}`, guildOptions, guildId, '— Pilih Server —', `onGuildChangeBound(${i})`)}
+              </div>
+              <div>
+                <label class="block text-[10px] font-semibold text-on-surface-variant uppercase tracking-wider mb-1">
+                  <span class="material-symbols-outlined text-[12px] align-middle">tag</span> Channel
+                </label>
+                ${renderSearchableDropdown(`channel-${i}`, channelOptions, m.channelId, '— Pilih Channel —', `onChannelChangeBound(${i})`)}
+                ${m.channelId && !selectedGuild ? `<p class="text-[9px] text-on-surface-variant mt-1 font-code">ID: ${m.channelId} (server tidak terdeteksi)</p>` : ''}
+              </div>
+            </div>
+
+            <!-- Schedule Type -->
+            <div>
+              <label class="block text-[10px] font-semibold text-on-surface-variant uppercase tracking-wider mb-1">
+                <span class="material-symbols-outlined text-[12px] align-middle">schedule</span> Jadwal Kirim
+              </label>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${isMin ? 'bg-primary-container text-on-primary-container shadow-sm' : 'bg-surface-container-high text-on-surface-variant hover:text-on-surface'}" onclick="setScheduleType(${i}, 'interval_minutes')">
+                  <span class="material-symbols-outlined text-[14px] align-middle">timer</span> Setiap X Menit
+                </button>
+                <button type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${isHour ? 'bg-primary-container text-on-primary-container shadow-sm' : 'bg-surface-container-high text-on-surface-variant hover:text-on-surface'}" onclick="setScheduleType(${i}, 'interval_hours')">
+                  <span class="material-symbols-outlined text-[14px] align-middle">hourglass_top</span> Setiap X Jam
+                </button>
+                <button type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${isSpecific ? 'bg-primary-container text-on-primary-container shadow-sm' : 'bg-surface-container-high text-on-surface-variant hover:text-on-surface'}" onclick="setScheduleType(${i}, 'specific_hours')">
+                  <span class="material-symbols-outlined text-[14px] align-middle">alarm</span> Pada Jam Tertentu
+                </button>
+              </div>
+
+              <!-- Schedule Value Input -->
+              <div class="mt-2">
+                ${isMin ? `
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-on-surface-variant">Kirim setiap</span>
+                    <select class="input-field text-xs w-24 font-code" onchange="setScheduleValue(${i}, parseInt(this.value))">
+                      ${[5,10,15,20,30,45,60].map(v => `<option value="${v}" ${sched.value === v ? 'selected' : ''}>${v}</option>`).join('')}
+                    </select>
+                    <span class="text-xs text-on-surface-variant">menit sekali</span>
+                  </div>
+                ` : ''}
+                ${isHour ? `
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-on-surface-variant">Kirim setiap</span>
+                    <select class="input-field text-xs w-24 font-code" onchange="setScheduleValue(${i}, parseInt(this.value))">
+                      ${[1,2,3,4,6,8,12].map(v => `<option value="${v}" ${sched.value === v ? 'selected' : ''}>${v}</option>`).join('')}
+                    </select>
+                    <span class="text-xs text-on-surface-variant">jam sekali</span>
+                  </div>
+                ` : ''}
+                ${isSpecific ? `
+                  <div>
+                    <p class="text-[10px] text-on-surface-variant mb-2">Pilih jam berapa saja pesan akan dikirim:</p>
+                    <div class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-12 gap-1.5">${hoursCheckboxes}</div>
+                    <p class="text-[9px] text-outline mt-1.5">Terpilih: ${selectedHours.length > 0 ? selectedHours.sort((a,b)=>a-b).map(h => h.toString().padStart(2,'0')+':00').join(', ') : 'Belum ada'}</p>
+                  </div>
+                ` : ''}
+              </div>
+
+              <!-- Resulting Cron (readonly info) -->
+              <div class="mt-1.5 flex items-center gap-2">
+                <span class="text-[9px] text-outline">Cron:</span>
+                <code class="bg-surface-container-high px-1.5 py-0.5 rounded text-[9px] text-primary font-code">${m.cronExpression || scheduleToCron(sched)}</code>
+              </div>
+            </div>
+
+            <!-- Message -->
+            <div>
+              <label class="block text-[10px] font-semibold text-on-surface-variant uppercase tracking-wider mb-1">
+                <span class="material-symbols-outlined text-[12px] align-middle">chat</span> Isi Pesan
+              </label>
+              <textarea class="input-field w-full text-xs" rows="2" placeholder="Tulis pesan yang akan dikirim otomatis..." data-field="message" data-idx="${i}" oninput="onScheduleInput(this)">${escapeHtml(m.message || '')}</textarea>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // Global helper functions for the custom dropdown clicks
+    window.onGuildChangeBound = (idx) => (guildId) => onGuildChange(idx, guildId);
+    window.onChannelChangeBound = (idx) => (channelId) => onChannelChange(idx, channelId);
+
+    function escapeHtml(str) { return (str || '').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+    function onScheduleInput(el) {
+      const idx = parseInt(el.dataset.idx);
+      const field = el.dataset.field;
+      if (scheduleData[idx]) scheduleData[idx][field] = el.value;
+    }
+
+    function onGuildChange(idx, guildId) {
+      scheduleData[idx].guildId = guildId;
+      scheduleData[idx].channelId = '';
+      renderScheduleList();
+    }
+
+    function onChannelChange(idx, channelId) {
+      scheduleData[idx].channelId = channelId;
+      renderScheduleList();
+    }
+
+    function onHourToggle(idx, hour, checked) {
+      const sched = cronToSchedule(scheduleData[idx].cronExpression);
+      let hours = sched.type === 'specific_hours' ? [...sched.hours] : [];
+      if (checked && !hours.includes(hour)) hours.push(hour);
+      if (!checked) hours = hours.filter(h => h !== hour);
+      hours.sort((a, b) => a - b);
+      scheduleData[idx].cronExpression = scheduleToCron({ type: 'specific_hours', hours });
+      renderScheduleList();
+    }
+
+    function setScheduleType(idx, type) {
+      let cron;
+      switch (type) {
+        case 'interval_minutes': cron = '*/30 * * * *'; break;
+        case 'interval_hours': cron = '0 */1 * * *'; break;
+        case 'specific_hours': cron = '0 9,12,15,18,21 * * *'; break;
+        default: cron = '0 * * * *';
+      }
+      scheduleData[idx].cronExpression = cron;
+      renderScheduleList();
+    }
+
+    function setScheduleValue(idx, value) {
+      const sched = cronToSchedule(scheduleData[idx].cronExpression);
+      sched.value = value;
+      scheduleData[idx].cronExpression = scheduleToCron(sched);
+      renderScheduleList();
+    }
+
+    function addScheduleRow() {
+      if (!scheduleDataLoaded && statusData && statusData.config) {
+        scheduleData = JSON.parse(JSON.stringify(statusData.config.scheduledMessages || []));
+        scheduleDataLoaded = true;
+      }
+      scheduleData.push({ channelId: '', cronExpression: '0 */1 * * *', message: '', enabled: true, label: 'Jadwal Baru', guildId: '' });
+      renderScheduleList();
+    }
+
+    function removeScheduleRow(idx) {
+      scheduleData.splice(idx, 1);
+      renderScheduleList();
+    }
+
+    function toggleScheduleEnabled(idx) {
+      if (scheduleData[idx]) {
+        scheduleData[idx].enabled = !scheduleData[idx].enabled;
+        renderScheduleList();
+      }
+    }
+
+    async function saveScheduledMessages() {
+      // Sync textarea values
+      document.querySelectorAll('#schedule-list textarea[data-field], #schedule-list input[data-field]').forEach(el => {
+        const i = parseInt(el.dataset.idx);
+        const f = el.dataset.field;
+        if (scheduleData[i]) scheduleData[i][f] = el.value;
+      });
+      const st = document.getElementById('schedule-status');
+      st.textContent = 'Menyimpan...'; st.style.color = '#4cd7f6';
+      try {
+        const res = await fetch('/api/config/scheduled', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scheduledMessages: scheduleData }) });
+        if (res.ok) {
+          st.textContent = '✓ Tersimpan & Cron di-restart!'; st.style.color = '#34d399';
+          if (statusData) statusData.config.scheduledMessages = JSON.parse(JSON.stringify(scheduleData));
+        }
+        else { st.textContent = '✗ Gagal menyimpan'; st.style.color = '#ffb4ab'; }
+      } catch (e) { st.textContent = '✗ Error: ' + e.message; st.style.color = '#ffb4ab'; }
+    }
+
+    // ---- Auto Reply ----
+    function toggleAutoReply() {
+      const t = document.getElementById('ar-toggle');
+      t.classList.toggle('on');
+    }
+
+    async function saveAutoReply() {
+      const enabled = document.getElementById('ar-toggle').classList.contains('on');
+      const template = document.getElementById('ar-template').value;
+      const st = document.getElementById('ar-save-status');
+      st.textContent = 'Menyimpan...'; st.style.color = '#4cd7f6';
+      try {
+        const res = await fetch('/api/config/autoreply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ enabled, template }) });
+        if (res.ok) { st.textContent = '✓ Tersimpan!'; st.style.color = '#34d399'; fetchStatus(); }
+        else { st.textContent = '✗ Gagal'; st.style.color = '#ffb4ab'; }
+      } catch (e) { st.textContent = '✗ Error: ' + e.message; st.style.color = '#ffb4ab'; }
+    }
+
+    // ---- Bot App Settings ----
+    async function saveBotAppSettings() {
+      const channelId = document.getElementById('botapp-channel').value.trim();
+      const st = document.getElementById('botapp-save-status');
+      if (!channelId) { st.textContent = '✗ Channel ID wajib diisi'; st.style.color = '#ffb4ab'; return; }
+      st.textContent = 'Menyimpan...'; st.style.color = '#4cd7f6';
+      try {
+        const res = await fetch('/api/config/botapp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ notificationChannelId: channelId }) });
+        if (res.ok) { st.textContent = '✓ Channel notifikasi diperbarui!'; st.style.color = '#34d399'; fetchStatus(); }
+        else { st.textContent = '✗ Gagal'; st.style.color = '#ffb4ab'; }
+      } catch (e) { st.textContent = '✗ Error: ' + e.message; st.style.color = '#ffb4ab'; }
+    }
+
+    // ---- Web Notify ----
+    async function sendWebNotify() {
+      const inputData = document.getElementById('notify-input').value.trim();
+      const st = document.getElementById('notify-status');
+      if (!inputData) { st.textContent = '✗ Pesan tidak boleh kosong'; st.style.color = '#ffb4ab'; return; }
+      st.textContent = 'Mengirim...'; st.style.color = '#4cd7f6';
+      try {
+        const res = await fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ inputData }) });
+        const data = await res.json();
+        if (res.ok) {
+          st.textContent = '✓ Notifikasi terkirim ke Discord!'; st.style.color = '#34d399';
+          document.getElementById('notify-input').value = '';
+        } else {
+          st.textContent = '✗ ' + (data.error || 'Gagal'); st.style.color = '#ffb4ab';
+        }
+      } catch (e) { st.textContent = '✗ Error: ' + e.message; st.style.color = '#ffb4ab'; }
+    }
+
+    // ---- Logs ----
+    async function fetchLogs() {
+      try {
+        const res = await fetch('/api/logs');
+        const logs = await res.json();
+        const container = document.getElementById('log-container');
+        document.getElementById('log-count').textContent = `${logs.length} entries`;
+        if (logs.length === 0) {
+          container.innerHTML = '<div class="text-on-surface-variant/50 italic py-2">Belum ada log aktivitas...</div>';
+          return;
+        }
+        const typeColors = {
+          'SCHEDULED-MSG': 'bg-primary-container/20 text-primary',
+          'AUTO-REPLY': 'bg-secondary-container/50 text-secondary',
+          'SELF-BOT': 'bg-tertiary-container/30 text-tertiary',
+          'APP-BOT': 'bg-emerald-500/20 text-emerald-400',
+          'WEB-NOTIFY': 'bg-amber-500/20 text-amber-400',
+          'CRON': 'bg-primary-container/20 text-primary',
+          'CONFIG': 'bg-surface-container-high text-on-surface-variant',
+        };
+        const statusColors = {
+          'SUCCESS': 'bg-emerald-500/20 text-emerald-400',
+          'ERROR': 'bg-rose-500/20 text-rose-400',
+          'ONLINE': 'bg-emerald-500/20 text-emerald-400',
+          'WARNING': 'bg-amber-500/20 text-amber-400',
+          'SETUP': 'bg-tertiary-container/30 text-tertiary',
+          'UPDATED': 'bg-primary-container/20 text-primary',
+        };
+        container.innerHTML = logs.map(l => `
+          <div class="flex items-start gap-2 py-1 px-1 rounded hover:bg-surface-container-high/40 transition-colors">
+            <span class="text-on-surface-variant/60 flex-shrink-0">[${l.timestamp}]</span>
+            <span class="badge ${typeColors[l.type] || 'bg-surface-container-high text-on-surface-variant'}">${l.type}</span>
+            <span class="badge ${statusColors[l.status] || 'bg-surface-container-high text-on-surface-variant'}">${l.status}</span>
+            <span class="text-on-surface min-w-0">${l.message}</span>
+          </div>
+        `).join('');
+      } catch (e) {
+        document.getElementById('log-container').innerHTML = `<div class="text-rose-400 py-2">Error: ${e.message}</div>`;
+      }
+    }
+
+    // ---- History (Firebase) ----
+    async function fetchHistory() {
+      try {
+        const res = await fetch('/api/firebase/inputs');
+        const inputs = await res.json();
+        const container = document.getElementById('history-list');
+        if (!inputs || inputs.length === 0) {
+          container.innerHTML = '<div class="text-on-surface-variant text-xs italic p-4 text-center">Belum ada riwayat input.</div>';
+          return;
+        }
+        container.innerHTML = inputs.map(inp => `
+          <div class="flex items-start gap-3 bg-surface-container-low p-3 rounded-lg border border-surface-variant/20">
+            <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-amber-400 text-[16px]">description</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <span class="font-code text-[10px] text-on-surface-variant">${new Date(inp.sentAt).toLocaleString('id-ID')}</span>
+                <span class="font-code text-[9px] text-outline">Ch: ${inp.channelId}</span>
+              </div>
+              <p class="text-on-surface text-xs mt-1 break-words whitespace-pre-wrap">${inp.inputData}</p>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        document.getElementById('history-list').innerHTML = `<div class="text-rose-400 text-xs p-4">Error: ${e.message}</div>`;
+      }
+    }
+
+    // ---- Update Firebase URL in UI ----
+    function updateFirebaseUI(d) {
+      if (d.firebase) {
+        const urlEl = document.getElementById('firebase-url');
+        if (urlEl) urlEl.textContent = d.firebase.url.replace('https://', '').replace('.firebasedatabase.app', '');
+      }
+    }
+
+    // ---- Init ----
+    fetchStatus();
+    setInterval(fetchStatus, 5000);
+    setInterval(() => {
+      if (document.getElementById('page-logs').classList.contains('active')) fetchLogs();
+    }, 5000);
+  </script>
+</body>
+</html>

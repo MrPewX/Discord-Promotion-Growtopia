@@ -1,0 +1,18 @@
+{
+  "scheduledMessages": [
+    {
+      "channelId": "1142985102938491823",
+      "cronExpression": "0 * * * *",
+      "enabled": true,
+      "label": "Pesan Promosi Utama",
+      "message": "Pesan otomatis setiap jam!"
+    }
+  ],
+  "autoReply": {
+    "enabled": true,
+    "template": "Halo! Saya sedang tidak aktif. Ini adalah pesan otomatis dari self-bot."
+  },
+  "botApp": {
+    "notificationChannelId": "1555157551652278322"
+  }
+}
